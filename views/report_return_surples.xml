@@ -1,0 +1,38 @@
+<odoo>
+<data>
+    <report
+        id="report_return_surples"
+        model="return.truck"
+        string="Exedente Validado"
+        name="return_truck.report_return_surples_view"
+        file="return_truck.report_return_surples"
+        report_type="qweb-html" />
+
+    <template id="report_return_surples_view">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                      <div style="color:#042037; display:inline;">
+                        <h3>Salida de Excedente</h3>
+                      </div>
+                      <br/>
+                      <div>
+                        <p style="font-size:17px;">Productor:  <b><spam t-field="doc.partner_id"/></b></p>
+                        <p style="font-size:17px;">Contrato: <b><spam t-field="doc.contract_id"/></b></p>
+                        <p style="font-size:17px;">Fecha: <b><spam t-field="doc.create_date"/></b></p>
+                        <p style="font-size:17px;">Toneladas Validadas: <b><spam t-field="doc.tons_validate"/><spam> toneladas</spam></b></p>
+                      </div>
+                      <br/>
+                        <br/>
+                      <div >
+                        <p>______________________________________</p>
+                        <p style="font-size:18px;margin-left:100px">Firma</p>
+                      </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</data>
+</odoo>

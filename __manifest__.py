@@ -19,12 +19,16 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','vehicle_reception'],
+    'depends': ['base','vehicle_reception','truck_reception'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/return_truck_group_access.xml',
+        'security/ir.model.access.csv',
         'views/return_truck.xml',
+        'views/report_return_truck.xml',
+        'views/report_return_surples.xml',
+        # 'views/papperformat.xml',
         # 'views/templates.xml',
     ],
     # only loaded in demonstration mode

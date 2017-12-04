@@ -1,25 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
   <data>
+    <!--  Section Name Title of the Form-->
+    <record id="seq_type_pinup_price" model="ir.sequence">
+      <field name="name">return truck</field>
+      <field name="code">reg_return_truck</field>
+    </record>
+    <record id="seq_return_truck" model="ir.sequence">
+        <field name="name">reg return truck</field>
+        <field name="code">reg_return_truck</field>
+        <field name="prefix">RET</field>
+        <field name="padding">3</field>
+        <field name="implementation">no_gap</field>
+    </record>
+    <!--  Section Form -->
     <record model="ir.ui.view" id="return_truck_form_view">
         <field name="name">return.truck.form</field>
         <field name="model">return.truck</field>
         <field name="arch" type="xml">
             <form string="Return Truck Form">
                 <header>
-                    <!-- <button name="action_move" type="object" string="Transfer" class="oe_highlight"
+                  <button name="weight_input" type="object" string="Peso Entrada" states="weight_input" class="oe_highlight"/>
+                  <button name="weight_output" type="object" string="Peso Salida" states="weight_output" class="oe_highlight"/>
+                    <button name="action_return_product" type="object" string="Transfer" class="oe_highlight"
                             attrs="{'invisible': ['|',
                                                      ('state', 'not in', ['done']),
-                                                     ('stock_picking_id', '!=', False)]}"/> -->
+                                                     ('stock_picking_id', '!=', False)]}"/>
                     <field name="state" widget="statusbar" readonly="1"/>
                 </header>
                 <sheet>
-                    <!-- <div class="oe_title">
+                    <div class="oe_title">
                         <h1>
-                            <label string="Transferencia"/>
                             <field name="name" class="oe_inline" readonly="1"/>
                         </h1>
-                    </div> -->
+                    </div>
                     <group>
                         <group col="2">
                             <field name="contract_id" required="1" attrs="{'readonly':[('state', 'not in', ['validation'])]}"/>
@@ -27,6 +41,7 @@
                             <field name="product_id"/>
                             <field name="location_id"   attrs="{'readonly':[('state', 'not in', ['weight_input'])],'required':[('state', 'in', ['weight_input'])],'invisible':[('state', 'in', ['validation'])]}"/>
                             <field name="location_dest_id" attrs="{'readonly':[('state', 'not in', ['weight_input'])],'required':[('state', 'in', ['weight_input'])],'invisible':[('state', 'in', ['validation'])]}"/>
+                            <field name="stock_type" readonly="1"  attrs="{'required':[('state', 'in', ['weight_input'])],'invisible':[('state', 'not in', ['weight_input'])]}"/>
                             <field name="tons_free" attrs="{'invisible':[('state', 'not in', ['validation'])]}"/>
                             <field name="tons_validate" attrs="{'readonly':[('state','not in', ['validation'])],'invisible':[('state', 'not in', ['validation'])]}"/>
                        </group>
@@ -34,6 +49,7 @@
                             <field name="date"  attrs="{'readonly':[('state', 'not in', ['weight_input'])]}"/>
                             <field name="driver"  attrs="{'readonly':[('state', 'not in', ['weight_input'])],'required':[('state', 'in', ['weight_input'])],'invisible':[('state', 'in', ['validation'])]}"/>
                             <field name="car_plates" attrs="{'readonly':[('state', 'not in', ['weight_input'])],'required':[('state', 'in', ['weight_input'])],'invisible':[('state', 'in', ['validation'])]}"/>
+                            <field name="owner_id" readonly="1" attrs="{'required':[('state', 'in', ['weight_input'])],'invisible':[('state', 'in', ['validation'])]}" />
                             <field name="active" string="Activo"/>
                         </group>
                     </group>
@@ -54,10 +70,10 @@
                     <group attrs="{'invisible':[('state', 'in', ['validation'])]}">
                         <group col="1">
                             <group col="2">
-                                <field name="input_kilos" string="Kilos de entrada" required="1" attrs="{'readonly':[('state', 'not in', ['weight_input'])],'invisible':[('state', 'in', ['validation'])]}"/>
+                                <field name="output_kilos" string="Kilos de entrada" required="1" attrs="{'readonly':[('state', 'not in', ['weight_input'])],'invisible':[('state', 'in', ['validation'])]}"/>
                             </group>
                             <group col="2">
-                                <field name="output_kilos" string="Kilos de salida" required="1" attrs="{'readonly':[('state', 'not in', ['weight_output'])],'invisible':[('state', 'in', ['validation'])]}"/>
+                                <field name="input_kilos"  string="Kilos de salida" required="1" attrs="{'readonly':[('state', 'not in', ['weight_output'])],'invisible':[('state', 'in', ['validation'])]}"/>
                             </group>
                             <group>
                                 <field name="raw_kilos" string="Kilos neto" attrs="{'invisible':[('state', 'in', ['validation'])]}"/>
@@ -71,6 +87,10 @@
                             <field name="clean_kilos" string="Kilos limpios" attrs="{'invisible':[('state', 'in', ['validation'])]}"/>
                         </group>
                     </group>
+                    <!-- Four Section  -->
+                    <group>
+                      <field name="stock_picking_id" string="Movimiento de almacen" attrs="{'invisible': [('state', 'not in', 'done')]}"/>
+                    </group>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -79,25 +99,45 @@
             </form>
         </field>
     </record>
+    <!-- Section Permissions -->
+    <record model="ir.ui.view" id="return_truck_form_view_permissions">
+              <field name="name">return.truck.form</field>
+              <field name="model">return.truck</field>
+              <field name="inherit_id" ref="return_truck_form_view"/>
+              <field name="groups_id" eval="[(4, ref('truck_reception.group_truck_selector'))]" />
+              <field name="arch" type="xml">
+                  <field name="state" position="attributes">
+                      <attribute name="clickable">1</attribute>
+                  </field>
+              </field>
+          </record>
+    <!-- Section Tree View -->
     <record model="ir.ui.view" id="retrun_truck_tree_view">
         <field name="name">truck.internal.tree</field>
         <field name="model">return.truck</field>
         <field name="arch" type="xml">
             <tree string="return truck tree">
-                <!-- <field name="name"/> -->
+                <field name="name"/>
                 <field name="contract_id"/>
+                <field name="partner_id"/>
+                <field name="raw_kilos" sum="raw kilos" string="Kilos Netos"/>
+                <field name="clean_kilos" sum="clean kilos" string="Kilos Limpios"/>
+                <field name="driver"/>
+                <field name="car_plates"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
   <record model="ir.actions.act_window" id="return_truck_list_action">
-      <field name="name">Regreso de camión</field>
+      <field name="name">Salida de Excedente</field>
       <field name="res_model">return.truck</field>
       <field name="view_type">form</field>
       <field name="view_mode">tree,form</field>
       <field name="help" type="html">
-          <p class="oe_view_nocontent_create">Create the first truck return</p>
+          <p class="oe_view_nocontent_create">Create the first surplus truck</p>
       </field>
   </record>
+  <!-- Menu Section -->
   <menuitem
       id="menu_action_return_truck_form"
       parent="vehicle_outlet.menu_outlets"

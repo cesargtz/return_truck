@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_return_truck_return_truck,return_truck.return_truck,model_return_truck_return_truck,,1,0,0,0
+access_truck_return_group_user,truck.return.access,model_return_truck,group_return_truck,1,1,1,0

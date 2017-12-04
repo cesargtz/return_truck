@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <report id="return_truck" model="return.truck" string="Salida de Excedente" name="return_truck.report_return_view" file="truck_return.report_out" report_type="qweb-pdf" paperformat="truck_reception.paperformat_ticket"/>
+
+  <template id="report_return_view">
+    <t t-call="report.html_container">
+      <t t-foreach="docs" t-as="o">
+        <!-- <t t-call="report.external_layout"> -->
+        <div class="page">
+          <table width="100%" >
+            <tr style="text-align: center;">
+              <td >
+                <div class="center-block">
+                  <img src="/truck_reception/static/src/img/logo.png" style="max-width: 250px;"/>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <h6 style="text-align: center;">Tel: (625)582 0100</h6>
+              </td>
+            </tr>
+          </table>
+          <br/>
+          <table style="border: 0px;  width:100%;">
+            <tr>
+              <td>
+                <p>Salida. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.name"></small></p>
+              </td>
+            </tr>
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p>Productor. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.partner_id"/></p>
+              </td>
+            </tr>
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p>Contrato. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.contract_id"/></p>
+              </td>
+            </tr>
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p>Conductor. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.driver"/></p>
+              </td>
+            </tr>
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p>Placas. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.car_plates"/></p>
+              </td>
+            </tr>
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p>Fecha. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.date"/></p>
+              </td>
+            </tr>
+
+          </table>
+            <!--  -->
+            <!-- <p>____________________________________</p> -->
+            <!--  -->
+          <!-- <table style="border: 0px;  width:100%;">
+            <tr >
+              <td height="10">
+                <p>Contratado. <small style="font-size:14px; color:black; font-weight:bold;" t-esc="'{0:,.2f}'.format(float(o.hired))"/><b> tons</b></p>
+              </td>
+            </tr> -->
+            <!--  -->
+            <!-- <tr >
+              <td height="10">
+                <p>Entregado. <small style="font-size:14px; color:black; font-weight:bold;" t-esc="'{0:,.2f}'.format(float(o.delivered))"/><b> tons</b></p>
+              </td>
+            </tr> -->
+            <!--  -->
+            <!-- <tr>
+              <td height="10">
+                <p>Pendiente. <small style="font-size:14px; color:black; font-weight:bold;" t-esc="'{0:,.2f}'.format(float(o.pending))"/><b> tons</b></p>
+              </td>
+            </tr>
+          </table> -->
+            <!--  -->
+            <p>____________________________________</p>
+            <!--  -->
+          <table style="border: 0px;  width:100%;">
+            <tr>
+              <td height="10">
+                <p>Humedad. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.humidity_rate"/></p>
+              </td>
+              <td height="10">
+                <p>Quebrado. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.break_rate"/></p>
+              </td>
+            </tr>
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p>Daño. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.damage_rate"/></p>
+              </td>
+              <td height="10">
+                <p>Temperatura. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.temperature"/></p>
+              </td>
+            </tr>
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p>Densidad. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.density"/></p>
+              </td>
+              <td height="10">
+                <p>Impureza. <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.impurity_rate"/></p>
+              </td>
+            </tr>
+          </table>
+          <!--  -->
+          <p>____________________________________</p>
+          <!--  -->
+          <table style="border: 0px;  width:100%;">
+            <!-- <tr>
+              <td height="10">
+                <p>Ticket <small style="font-size:14px; color:black; font-weight:bold;" t-field="o.ticket"/></p>
+              </td>
+            </tr> -->
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p><b>Peso de entrada. </b><small style="font-size:14px; color:black; font-weight:bold;" t-esc="'{0:,.2f}'.format(float(o.output_kilos))"/><b> kg</b></p>
+              </td>
+            </tr>
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p><b>Peso de salida. </b><small style="font-size:14px; color:black; font-weight:bold;"  t-esc="'{0:,.2f}'.format(float(o.input_kilos))" /><b> kg</b></p>
+              </td>
+            </tr>
+            <!--  -->
+            <tr>
+              <td height="10">
+                <p>
+                  <b>Kilos netos. </b><small style="font-size:14px; color:black; font-weight:bold;" t-esc="'{0:,.2f}'.format(float(o.raw_kilos))"/><b> kg</b>
+                </p>
+                </td>
+              </tr>
+              <!--  -->
+          </table>
+          <!--  -->
+          <p>____________________________________</p>
+          <!--  -->
+          <table style="border: 0px;  width:100%;">
+              <tr>
+                <td height="10">
+                  <p>Kilos quebrados. <small style="font-size:14px; color:black; font-weight:bold;" t-esc="'{0:,.2f}'.format(float(o.broken_kilos))"/><b> kg</b></p>
+                </td>
+              </tr>
+              <!--  -->
+              <tr>
+                <td height="10">
+                  <p>Kilos impuros. <small style="font-size:14px; color:black; font-weight:bold;" t-esc="'%.2f'%o.impure_kilos"/><b> kg</b></p>
+                </td>
+              </tr>
+              <!--  -->
+              <tr>
+                <td height="10">
+                  <p>Kilos dañados. <small style="font-size:14px; color:black; font-weight:bold;" t-esc="'{0:,.2f}'.format(float(o.damaged_kilos))"/><b> kg</b></p>
+                </td>
+              </tr>
+              <!--  -->
+              <tr>
+                <td height="10">
+                  <p>Kilos humedos. <small style="font-size:14px; color:black; font-weight:bold;" t-esc="'{0:,.2f}'.format(float(o.humid_kilos))"/><b> kg</b></p>
+                </td>
+              </tr>
+              <!--  -->
+            </table>
+            <!--  -->
+            <p>____________________________________</p>
+            <!--  -->
+            <table style="border: 0px;  width:100%; font-size:20px;">
+              <tr>
+                <td style="text-align: right;">
+                  <p><b>Kilos Netos: </b><small style="font-size:20px; color:black; font-weight:bold;" t-esc="'{0:,.2f}'.format(float(o.raw_kilos))"/><b> kg</b>
+                  </p>
+                </td>
+              </tr>
+              <!--  -->
+              <!--  Firma -->
+            </table>
+            <table style="border: 0px;  width:100%; font-size:20px;">
+              <tr>
+                <td style="text-align: center;">
+                  <p>____________________<small style="font-size:14px; color:#474545; font-weight:bold;"></small></p>
+                </td>
+              </tr>
+              <br/>
+              <tr>
+                <td style="text-align: center;">
+                  <p>Firma<small style="font-size:13px; color:#424242; font-weight:bold;" ></small></p>
+                </td>
+              </tr>
+              <!--  -->
+            </table>
+            <br/>
+            <p style="text-align: center; font-size:12px; color:#424242">¡Creando mejores comunidades agrícolas!</p>
+          </div>
+          <!-- </t>  -->
+        </t>
+      </t>
+    </template>
+
+  </odoo>
