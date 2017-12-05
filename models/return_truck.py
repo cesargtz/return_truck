@@ -116,7 +116,7 @@ class ReturnTruck(models.Model):
             'min_date': self.date,
             'origin': self.contract_id.name,
             'owner_id': self.owner_id.id,
-            'picking_type_id': 3,
+            'picking_type_id': self.stock_type,
             })
 
 
