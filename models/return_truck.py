@@ -106,8 +106,7 @@ class ReturnTruck(models.Model):
     @api.multi
     def action_return_product(self):
         grupo_id = self.env['procurement.group'].search([('name','=',self.contract_id.name)], limit=1)
-        print("***********")
-        print(grupo_id.id)
+
         move = self.env['stock.picking'].create({
             'partner_id': self.partner_id.id,
             'location_id': self.location_id.id,
@@ -117,20 +116,6 @@ class ReturnTruck(models.Model):
             'owner_id': self.owner_id.id,
             'picking_type_id': self.stock_type.id,
             })
-
-        # 'group_id': grupo_id.id,
-        # Al crear el stock operation estas no mueven los quants
-        # self.env['stock.pack.operation'].create({
-        #     'product_id': self.product_id.id,
-        #     'product_qty': self.raw_kilos / 1000,
-        #     'ordered_qty': self.raw_kilos / 1000,
-        #     'qty_done': self.raw_kilos / 1000,
-        #     'product_uom_id': self.product_id.product_tmpl_id.uom_id.id,
-        #     'location_id': self.location_id.id,
-        #     'location_dest_id': self.location_dest_id.id,
-        #     'owner_id': self.owner_id.id,
-        #     'picking_id': move.id,
-        #     })
 
         self.env['stock.move'].create({
             'product_id': self.product_id.id,
@@ -142,13 +127,14 @@ class ReturnTruck(models.Model):
             'name': "Salida de exedente",
             'location_id': self.location_id.id,
             'location_dest_id': self.location_dest_id.id,
-            'picking_type_id': 4,
+            'picking_type_id': self.stock_type.id,
             'picking_id': move.id,
             'group_id': grupo_id.id,
             })
 
         move.action_confirm()
         move.force_assign()
+        move.pack_operation_ids.write({'qty_done':self.raw_kilos/1000})
         move.action_done()
         self.stock_picking_id = self.env['stock.picking'].search(
             [('state', 'in', ['done'])], order='date desc', limit=1)
