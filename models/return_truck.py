@@ -112,25 +112,25 @@ class ReturnTruck(models.Model):
             'partner_id': self.partner_id.id,
             'location_id': self.location_id.id,
             'location_dest_id': self.location_dest_id.id,
-            'group_id': grupo_id.id,
             'min_date': self.date,
             'origin': self.contract_id.name,
             'owner_id': self.owner_id.id,
-            'picking_type_id': self.stock_type,
+            'picking_type_id': self.stock_type.id,
             })
 
-
-        self.env['stock.pack.operation'].create({
-            'product_id': self.product_id.id,
-            'product_qty': self.raw_kilos / 1000,
-            'ordered_qty': self.raw_kilos / 1000,
-            'qty_done': self.raw_kilos / 1000,
-            'product_uom_id': self.product_id.product_tmpl_id.uom_id.id,
-            'location_id': self.location_id.id,
-            'location_dest_id': self.location_dest_id.id,
-            'owner_id': self.owner_id.id,
-            'picking_id': move.id,
-            })
+        # 'group_id': grupo_id.id,
+        # Al crear el stock operation estas no mueven los quants
+        # self.env['stock.pack.operation'].create({
+        #     'product_id': self.product_id.id,
+        #     'product_qty': self.raw_kilos / 1000,
+        #     'ordered_qty': self.raw_kilos / 1000,
+        #     'qty_done': self.raw_kilos / 1000,
+        #     'product_uom_id': self.product_id.product_tmpl_id.uom_id.id,
+        #     'location_id': self.location_id.id,
+        #     'location_dest_id': self.location_dest_id.id,
+        #     'owner_id': self.owner_id.id,
+        #     'picking_id': move.id,
+        #     })
 
         self.env['stock.move'].create({
             'product_id': self.product_id.id,
@@ -148,6 +148,7 @@ class ReturnTruck(models.Model):
             })
 
         move.action_confirm()
+        move.force_assign()
         move.action_done()
         self.stock_picking_id = self.env['stock.picking'].search(
             [('state', 'in', ['done'])], order='date desc', limit=1)
